@@ -1,0 +1,95 @@
+<template>
+  <v-container fluid fill-height class="login-container">
+    <v-layout align-center justify-center>
+      <v-flex xs12 sm8 md3>
+        <v-card class="elevation-12" style="padding: 20px">
+          <v-card-text>
+            <h1 style="color: #4caf50; margin-bottom: 30px; margin-top: 10px">
+              Prijavi se
+            </h1>
+            <v-form class="mt-4" v-model="isValid">
+              <v-text-field
+                color="green"
+                prepend-icon="person"
+                name="email"
+                label="Email"
+                type="text"
+                v-model="userLogin.email"
+                :rules="[(v) => !!v || 'Email je obavezan']"
+                required
+              ></v-text-field>
+              <v-text-field
+                color="green"
+                id="password"
+                prepend-icon="lock"
+                name="password"
+                label="Lozinka"
+                type="password"
+                v-model="userLogin.password"
+                :rules="[(v) => !!v || 'Lozinka je obavezna']"
+                required
+              ></v-text-field>
+            </v-form>
+          </v-card-text>
+          <v-card-actions class="justify-center">
+            <v-btn
+              color="green"
+              class="my-2"
+              style="width: 95%; color: white"
+              :disabled="!isValid"
+              v-on:click="login"
+              >Prijavi se</v-btn
+            >
+          </v-card-actions>
+        </v-card>
+      </v-flex>
+    </v-layout>
+    <v-snackbar v-model="wrong" top color="red darken-3">
+      {{this.message}}
+    </v-snackbar>
+  </v-container>
+</template>
+
+<script>
+/* eslint-disable */
+export default {
+  name: "Login",
+  props: {
+    source: String,
+  },
+  data: () => ({
+    userLogin: {
+      email: null,
+      password: null,
+    },
+    isValid: true,
+    wrong: false,
+    token: null,
+    message: ''
+  }),
+  created() {
+    localStorage.removeItem("token");
+  },
+  methods: {
+    login: function () {
+      let email = this.userLogin.email;
+      let password = this.userLogin.password;
+      this.$store
+        .dispatch("login", { email, password })
+        .then(() => {
+          this.$router.push("/statistika");
+        })
+        .catch((err) => {
+          this.wrong = true;
+          console.log(err.response);
+          this.message = err.response.data;
+        });
+    },
+  },
+};
+</script>
+<style scoped>
+.login-container {
+  background-image: url(../assets/4.png);
+}
+</style>
