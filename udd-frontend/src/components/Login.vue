@@ -45,7 +45,7 @@
       </v-flex>
     </v-layout>
     <v-snackbar v-model="wrong" top color="red darken-3">
-      {{this.message}}
+      {{ this.message }}
     </v-snackbar>
   </v-container>
 </template>
@@ -65,7 +65,7 @@ export default {
     isValid: true,
     wrong: false,
     token: null,
-    message: ''
+    message: "",
   }),
   created() {
     localStorage.removeItem("token");
@@ -77,7 +77,7 @@ export default {
       this.$store
         .dispatch("login", { email, password })
         .then(() => {
-          this.$router.push("/statistika");
+          this.$router.push("/pretraga");
         })
         .catch((err) => {
           this.wrong = true;

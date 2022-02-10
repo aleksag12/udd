@@ -43,10 +43,10 @@ const router = new VueRouter({
 });
 
 // router.beforeEach((to, from, next) => {
-//   if (to.path === '/') next({ name: 'Login' })
-//   if ((to.name !== 'Login') && !store.getters.authenticated) next({ name: 'Login' })
+//   console.log(to.name);
+//   if ((to.name !== 'Login' && to.name !== 'Homepage') && !store.getters.authenticated) next({ name: 'Login' })
 //   else next()
-//   if ((to.name === 'Login') && store.getters.authenticated) next({ name: from.name })
+//   if ((to.name === 'Login' || to.name === 'Homepage') && store.getters.authenticated) next({ name: from.name })
 //   else next()
 // })
 

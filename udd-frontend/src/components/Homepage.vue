@@ -32,22 +32,13 @@ export default {
   components: {
     Navbar,
   },
-  data: () => ({
-
-  }),
-  computed: {
-    ...mapState({
-      currentUser: (state) => state.user,
-    }),
-  },
+  data: () => ({}),
   methods: {
     apliciraj: function () {
       this.$router.push("/prijava");
-    }
+    },
   },
-  created() {
-    this.$store.dispatch("getCurrentUser");
-  },
+  created() {},
 };
 </script>
 

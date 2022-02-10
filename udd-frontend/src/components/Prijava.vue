@@ -71,7 +71,18 @@
                 required
                 single-line
               ></v-select>
-              <v-file-input color="green" required show-size counter chips accept=".pdf" label="Dodaj CV" ref="myfile" v-model="files" :rules="[(v) => !!v || 'CV je obavezan']"></v-file-input>
+              <v-file-input
+                color="green"
+                required
+                show-size
+                counter
+                chips
+                accept=".pdf"
+                label="Dodaj CV"
+                ref="myfile"
+                v-model="files"
+                :rules="[(v) => !!v || 'CV je obavezan']"
+              ></v-file-input>
             </v-form>
           </v-card-text>
           <v-card-actions class="justify-center">
@@ -88,7 +99,7 @@
       </v-flex>
     </v-layout>
     <v-snackbar v-model="wrong" top color="red darken-3">
-      {{this.message}}
+      {{ this.message }}
     </v-snackbar>
   </div>
 </template>
@@ -105,31 +116,26 @@ export default {
   },
   data: () => ({
     application: {
-      firstName: '',
-      lastName: '',
-      email: '',
-      education: '',
-      city: '',
-      country: '',
-      cv: ''
+      firstName: "",
+      lastName: "",
+      email: "",
+      education: "",
+      city: "",
+      country: "",
+      cv: "",
     },
     isValid: true,
-    message: '',
-    wrong: '',
+    message: "",
+    wrong: "",
     files: null,
     degrees: [
-      {name: "Osnovno obrazovanje", value: "1"},
-      {name: "Srednje obrazovanje", value: "2"},
-      {name: "Osnovne akademske studije", value: "3"},
-      {name: "Master akademske studije", value: "4"},
-      {name: "Doktorske studije", value: "5"},
+      { name: "Osnovno obrazovanje", value: "1" },
+      { name: "Srednje obrazovanje", value: "2" },
+      { name: "Osnovne akademske studije", value: "3" },
+      { name: "Master akademske studije", value: "4" },
+      { name: "Doktorske studije", value: "5" },
     ],
   }),
-  computed: {
-    ...mapState({
-      currentUser: (state) => state.user,
-    }),
-  },
   methods: {
     apliciraj: function () {
       let formData = new FormData();
@@ -143,22 +149,34 @@ export default {
       formData.append("cv", this.files, this.files.name);
 
       console.log(this.files);
+
+      this.$store
+        .dispatch("apliciraj", formData)
+        .then(() => {
+          this.$router.push("/");
+        })
+        .catch((err) => {
+          this.wrong = true;
+          console.log(err.response);
+          this.message = err.response.data;
+        });
     },
     getPosition() {
       return new Promise((resolve, reject) => {
-        navigator.geolocation.getCurrentPosition(resp => {
-          resolve({ lng: resp.coords.longitude, lat: resp.coords.latitude });
-        },
-          err => {
+        navigator.geolocation.getCurrentPosition(
+          (resp) => {
+            resolve({ lng: resp.coords.longitude, lat: resp.coords.latitude });
+          },
+          (err) => {
             reject(err);
-          });
+          }
+        );
       });
     },
   },
   created() {
-    this.$store.dispatch("getCurrentUser");
     if (navigator.geolocation) {
-      this.getPosition().then(pos => {
+      this.getPosition().then((pos) => {
         console.log(`Positon: ${pos.lng} ${pos.lat}`);
       });
     } else {
